@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>UserGo</title>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	<script src="https://unpkg.com/react@15/dist/react.js"></script>
+	<script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+
+</head>
+
+<body>
+
+	<div id="todo-wrapper">
+
+	</div>
+
+	<h1 class="title">Usergo - a User Rest api</h1>
+	<div id="usr-container">
+	<form id="registerForm">
+	<label>Email :</label>
+	<input type="text" name="email" id="email" placeholder="john@example.com" required />
+	<label>Name :</label>
+	<input type="text" name="name" id="name" placeholder="Name" required />
+	<label>Password :</label>
+	<input type="password" name="password" id="password" placeholder="Password" required />
+	<button type="submit" id="submitRegister" class="btn btn-default">Register</button>
+	</form>
+
+
+	</div>
+	<p>This is another paragraph.</p>
+	<div id="homepage">
+		<h1>Hire a user in your area</h1>
+		<div id="users">
+		</div>
+	</div>
+
+
+	<script type="text/babel">
+		var Users = React.createClass({
+			getInitialState: function(){
+				return({
+					users:[]
+				});
+			},
+			render: function(){
+				var users = this.state.users;
+				users = users.map(function(user, index){
+					return(
+						<li key={index}>
+						<span className="_id">{user._id}</span><br />
+						<button onClick={this.clicked} id={user._id} type="button" class="btn btn-primary" value = {user._id} >{user._id}</button>
+						<span className="email">{user.email}</span>
+						<span className="name">{user.name}</span>
+						<span className="password">{user.password}</span>
+						</li>
+					);
+				}.bind(this));
+				return(
+					<div id ="user-container">
+						<form id="search" onSubmit={this.handleSubmit}>
+							<input type ="submit" value ="Find User" />
+						</form>
+						<ul>{users}</ul>
+					</div>
+				);
+			},
+			clicked: function(e){
+				console.log(e.target.value);
+			},
+			handleSubmit: function(e){
+				e.preventDefault();
+				fetch('/apiuser/user').then(function(data){
+					return data.json();
+				}).then( json => {
+						this.setState({
+							users: json
+						});
+				});
+			}
+		});
+
+		ReactDOM.render(<Users />,document.getElementById('todo-wrapper'));
+
+	function giveid(id){
+		alert(id);
+	}
+
+	</script>
+
+	<!-- <script>
+
+	$( document ).ready(function() {
+
+		// SUBMIT FORM
+	    $("#registerForm").submit(function(event) {
+			// Prevent the form from submitting via the browser.
+			event.preventDefault();
+			ajaxPost();
+		});
+
+
+	    function ajaxPost(){
+
+	    	// PREPARE FORM DATA
+					var UserData ={
+						email: $("#email").val(),
+						name: $("#name").val(),
+						password: $("#password").val()
+					}
+
+	    	// DO POST
+	    	$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : window.location + "apiuser/registeruser",
+				data : JSON.stringify(UserData),
+				dataType : 'json',
+				success : function() {
+					alert("Success terosss");
+				},
+				error : function(e) {
+					alert("Error!")
+					console.log("ERROR: ", e);
+					console.log(UserData.email);
+				}
+			});
+
+	    	// Reset FormData after Posting
+	    	resetData();
+
+	    }
+
+			function resetData(){
+				$("#email").val("");
+				$("#name").val("");
+				$("#password").val("");
+			}
+	})
+	</script> -->
+
+
+</body>
+
+</html>

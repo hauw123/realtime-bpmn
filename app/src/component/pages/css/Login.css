@@ -1,0 +1,65 @@
+/* @import url('https://fonts.googleapis.com/css?family=Raleway'); */
+
+/* 
+ .container{
+    background-image: url('../../img/wallpapertech.png');
+    padding-top: 10%;
+    height: 92vh;
+    width: 100%;
+    position:relative;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+} */
+
+/* .card{
+    position: absolute;
+    margin: auto;
+    padding-right: 5%;
+    padding-left: 5%;
+    padding-bottom: 5%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 25%;
+    height: 50%;
+    background-color: #ccc;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+} */
+
+/* .card > form{
+    display: flex;
+    flex-direction: column;
+}
+
+.card h1{
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.form-item{
+    font-family: 'Raleway', sans-serif;
+    padding: 5px;
+    margin-bottom: 2rem;
+    height: 30px;
+    width: 16rem;
+    border: 1px solid grey;
+}
+
+.form-submit{
+    font-family: 'Raleway', sans-serif;
+    height: 35px;
+    color: #fff;
+    background-color: #1abc9c;
+    border: none;
+    letter-spacing: 0.2rem;
+    transition: 0.3s opacity ease;
+    cursor: pointer;
+}
+.form-submit:hover{
+   opacity: 0.6;
+} */

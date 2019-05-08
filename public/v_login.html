@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script src="https://unpkg.com/react@15/dist/react.js"></script>
+<script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+<style>
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.bg {
+  /* The image used */
+  background-image: url("img/loginwallpaper.jpg");
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.center-div
+{
+  position: absolute;
+  margin: auto;
+  padding: 5%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 25%;
+  height: 50%;
+  background-color: #ccc;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.5);
+}
+</style>
+</head>
+<body class="bg">
+  <div id="todo-wrapper">
+
+  </div>
+  <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">WebSiteName</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Page 1</a></li>
+      <li><a href="#">Page 2</a></li>
+      <li><a href="#">Page 3</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="center-div" id="div_register">
+  <form id="registerForm" style="color:white;">
+    <div class="form-group">
+      <label for="email">Email :</label>
+      <input class="form-control" type="email" name="email" id="email" placeholder="john@example.com" required />
+    </div>
+    <div class="form-group">
+      <label>Name :</label>
+      <input class="form-control" type="text" name="name" id="name" placeholder="Name" required />
+    </div>
+    <div class="form-group">
+      <label>Password :</label>
+      <input class="form-control" type="password" name="password" id="password" placeholder="Password" required />
+    </div>
+    <br>
+    <button type="submit" id="submitRegister" class="btn btn-default btn-block">Sign Up</button>
+    <br>
+    <p>Already have an account? <a class="signin" href="#" id="signin">Sign in</a></p>
+  </form>
+</div>
+
+<!-- <div class="center-div" id="div_login">
+  <form id="loginForm" style="color:white;">
+    <div class="form-group">
+      <label for="email">Email :</label>
+      <input class="form-control" type="email" name="email" id="email" placeholder="john@example.com" required />
+    </div>
+    <div class="form-group">
+      <label>Password :</label>
+      <input class="form-control" type="password" name="password" id="password" placeholder="Password" required />
+    </div>
+    <br>
+    <button type="submit" id="submitLogin" class="btn btn-default btn-block">Sign In</button>
+    <br>
+    <p>Don't have account? <a class="signup" href="#" id="signup">Sign up here</a></p>
+  </form>
+</div> -->
+
+</body>
+<script type="text/babel">
+  var Users = React.createClass({
+    getInitialState: function(){
+      return({
+        users:[]
+      });
+    },
+    render: function(){
+      var users = this.state.users;
+      users = users.map(function(user, index){
+        return(
+          <li key={index}>
+          <span className="_id">{user._id}</span><br />
+          <button onClick={this.clicked} id={user._id} type="button" class="btn btn-primary" value = {user._id} >{user._id}</button>
+          <span className="email">{user.email}</span>
+          <span className="name">{user.name}</span>
+          <span className="password">{user.password}</span>
+          </li>
+        );
+      }.bind(this));
+      return(
+        <div id ="user-container">
+          <form id="search" onSubmit={this.handleSubmit}>
+            <input type ="submit" value ="Find User" />
+          </form>
+          <ul>{users}</ul>
+        </div>
+      );
+    },
+    clicked: function(e){
+      console.log(e.target.value);
+    },
+    handleSubmit: function(e){
+      e.preventDefault();
+      fetch('/apiuser/user').then(function(data){
+        return data.json();
+      }).then( json => {
+          this.setState({
+            users: json
+          });
+      });
+    }
+  });
+
+  ReactDOM.render(<Users />,document.getElementById('todo-wrapper'));
+
+function giveid(id){
+  alert(id);
+}
+
+</script>
+</html>
