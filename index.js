@@ -12,6 +12,8 @@ const socketIO = require('socket.io');
 //set up express app
 const app = express();
 
+const path = require("path")
+
 // Add headers
 app.use(cors());
 
@@ -24,7 +26,7 @@ var sockets = require('./routers/socket');
 sockets.socketServer(app, server);
 
 //connect to mongodb Testing Hosting
-mongoose.connect('mongodb://localhost/database_rtbpmn', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/database_rtbpmn', {
   useNewUrlParser: true
 });
 
@@ -33,7 +35,12 @@ mongoose.connect('mongodb://localhost/database_rtbpmn', {
 // });
 mongoose.Promise = global.Promise;
 
-app.use(express.static('public'));
+// ... other app.use middleware 
+app.use(express.static(path.join(__dirname, "app", "build")))
+
+// ...
+// Right before your app.listen(), add this:
+
 
 app.use(bodyParser.json());
 app.use(express.json()); // to support JSON-encoded bodies
@@ -97,13 +104,17 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "app", "build", "index.html"));
+});
+
 //lister for request
 // app.listen(process.env.port || 3000, function() {
 //   console.log('now listening for request');
 // });
 
 //Port yang akan digunakan 
-server.listen(PORT, () => console.log('Server started on port'));
+app.listen(PORT, () => console.log('Server started on port'));
 
 // const projectroom = ["aaasgag","testgag"]
 
