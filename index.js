@@ -190,3 +190,13 @@ app.listen(PORT, () => console.log('Server started on port'));
 //   })
 
 // setInterval(() => io.emit('time', new Date().toTimeString()), 10);
+
+
+//Untuk hosting heroku
+// "start": "node index.js",
+//     "heroku-postbuild": "cd app && npm install --only=dev && npm install && npm run build",
+
+//Untuk Local
+// "server": "nodemon index.js",
+// "app": "npm start --prefix app",
+// "dev": "concurrently \"npm run server\" \"npm run app\""
