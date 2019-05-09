@@ -5,7 +5,8 @@ import Moment from 'moment';
 
 //const endpoint = "/bpmndiagram";
 const endpoint = "https://realtime-e-bpmn.herokuapp.com/";
-const socket = socketIOClient.connect(endpoint);
+// const socket = socketIOClient.connect(endpoint);
+const socket = socketIOClient.connect();
 
 export class chatroom extends Component {
 

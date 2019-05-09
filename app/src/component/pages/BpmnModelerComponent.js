@@ -20,7 +20,8 @@ import socketIOClient from 'socket.io-client';
 
 //const endpoint = "/bpmndiagram";
 const endpoint = "https://realtime-e-bpmn.herokuapp.com/";
-const socket = socketIOClient(endpoint);
+// const socket = socketIOClient(endpoint);
+const socket = socketIOClient.connect();
 
 var GoogleAuth;
 var SCOPE = 'https://www.googleapis.com/auth/drive';
