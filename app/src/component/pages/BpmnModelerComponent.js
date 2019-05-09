@@ -20,8 +20,7 @@ import socketIOClient from 'socket.io-client';
 
 const endpoint = "https://realtime-e-bpmn.herokuapp.com/bpmndiagram";
 const socket = socketIOClient(endpoint,{
-    transports: ['websocket'],
-    upgrade: false,
+    transports: ['websocket']
 });
 
 var GoogleAuth;
