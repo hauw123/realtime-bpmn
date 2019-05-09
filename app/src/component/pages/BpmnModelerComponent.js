@@ -18,8 +18,11 @@ import canvg from 'canvg-browser';
 
 import socketIOClient from 'socket.io-client';
 
-const endpoint = "wss://realtime-e-bpmn.herokuapp.com/diagram";
-const socket = socketIOClient(endpoint);
+const endpoint = "http://realtime-e-bpmn.herokuapp.com/diagram";
+const socket = socketIOClient(endpoint, {
+    path:'/socket.io.client',
+    transports: ['websocket']
+});
 
 var GoogleAuth;
 var SCOPE = 'https://www.googleapis.com/auth/drive';
