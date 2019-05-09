@@ -3,7 +3,7 @@ import {InputGroup,Form,Button} from 'react-bootstrap';
 import socketIOClient from 'socket.io-client';
 import Moment from 'moment';
 
-const endpoint = "https://realtime-e-bpmn.herokuapp.com/diagram";
+const endpoint = "wss://realtime-e-bpmn.herokuapp.com/diagram";
 const socket = socketIOClient(endpoint);
 
 export class chatroom extends Component {

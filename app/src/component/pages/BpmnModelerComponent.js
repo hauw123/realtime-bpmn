@@ -18,7 +18,7 @@ import canvg from 'canvg-browser';
 
 import socketIOClient from 'socket.io-client';
 
-const endpoint = "https://realtime-e-bpmn.herokuapp.com/diagram";
+const endpoint = "wss://realtime-e-bpmn.herokuapp.com/diagram";
 const socket = socketIOClient(endpoint);
 
 var GoogleAuth;
