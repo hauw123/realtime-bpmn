@@ -18,10 +18,8 @@ import canvg from 'canvg-browser';
 
 import socketIOClient from 'socket.io-client';
 
-//const endpoint = "/bpmndiagram";
-const endpoint = "https://realtime-e-bpmn.herokuapp.com/bpmndiagram";
-// const socket = socketIOClient(endpoint);
-const socket = socketIOClient.connect(endpoint);
+const endpoint = "https://realtime-e-bpmn.herokuapp.com/diagram";
+const socket = socketIOClient(endpoint);
 
 var GoogleAuth;
 var SCOPE = 'https://www.googleapis.com/auth/drive';
@@ -120,7 +118,11 @@ class BpmnModelerComponent extends Component {
 
     componentWillMount() {
     
-        socket.emit("joinRoom",this.props.match.params.id);
+        socket.emit("joinRoomProject", {
+            id:this.props.match.params.id,
+            user:localStorage.email,
+            date:Date.now()
+        })
 
         var _this = this;
         this.setState({ projectid: this.props.match.params.id })

@@ -15,6 +15,7 @@ exports.socketServer = function (app, server) {
       console.log("Client connected in namespace" + socket);
   
       socket.on("joinRoom",(room) => {
+        console.log("join room chat")
         console.log(room.id)
         console.log(room.user)
         socket.join(room.id);
@@ -22,6 +23,19 @@ exports.socketServer = function (app, server) {
           user: room.user,
           date:room.date
         });
+        // console.log('joining room : '+ room);
+          
+        //   io.of("/bpmndiagram").emit("newUser", "New user has join the "+room)
+        //   .in(room).emit("newUser", "New user has join "+ room)
+        //   return socket.emit("success", "you have succesfully join this "+ room);
+
+      });
+
+      socket.on("joinRoomProject",(room) => {
+        console.log("join room project")
+        console.log(room.id)
+        console.log(room.user)
+        socket.join(room.id);
         // console.log('joining room : '+ room);
           
         //   io.of("/bpmndiagram").emit("newUser", "New user has join the "+room)
@@ -56,9 +70,9 @@ exports.socketServer = function (app, server) {
         })
       })
   
-      socket.on('disconnect', function(data){
-        console.log('Client disconnected')
-      });
+      // socket.on('disconnect', function(data){
+      //   console.log('Client disconnected')
+      // });
     })
 
     setInterval(() => io.emit('time', new Date().toTimeString()), 10);

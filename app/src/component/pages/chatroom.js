@@ -3,10 +3,8 @@ import {InputGroup,Form,Button} from 'react-bootstrap';
 import socketIOClient from 'socket.io-client';
 import Moment from 'moment';
 
-//const endpoint = "/bpmndiagram";
-const endpoint = "https://realtime-e-bpmn.herokuapp.com/bpmndiagram";
-// const socket = socketIOClient.connect(endpoint);
-const socket = socketIOClient.connect(endpoint);
+const endpoint = "https://realtime-e-bpmn.herokuapp.com/diagram";
+const socket = socketIOClient(endpoint);
 
 export class chatroom extends Component {
 
@@ -41,7 +39,9 @@ export class chatroom extends Component {
             socket.on('joinproject' ,function(data){
                 console.log("Join project")
                 console.log(data.user)
-                _this.messagearray.push(
+                console.log("This is emit from server ")
+                if(data.user !== localStorage.email){
+                                    _this.messagearray.push(
                     <li key={Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)} style={stylemessage} className="right clearfix">
                     <div className="chat-body clearfix"><div>
                     <strong className="pull-left primary-font">System</strong><p style={textStyle}>{Moment(new Date(data.date)).format("hh:mm:ss")}</p>
@@ -51,6 +51,8 @@ export class chatroom extends Component {
             _this.setState({
                 showdata : _this.messagearray,
                 });
+                }
+
             })
 
   
