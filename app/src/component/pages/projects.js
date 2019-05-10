@@ -240,7 +240,7 @@ export class projects extends Component {
                     {/* GoogleDrive */}
                     <Button variant="outline-dark" id="sign-in-or-out-button">Sign In/Authorize Google</Button>&nbsp;
 
-                    <Button id="getDrive" hidden><GooglePicker clientId={'698242060833-9at25qfsnpvvhjr5eg3qiaes74dpbmpv.apps.googleusercontent.com'}
+                    <GooglePicker clientId={'698242060833-9at25qfsnpvvhjr5eg3qiaes74dpbmpv.apps.googleusercontent.com'}
                         developerKey={'AIzaSyDcf2KSBcCS1EHgEO6xCGwvlf5DT9mvDG4'}
                         scope='https://www.googleapis.com/auth/drive'
                         onChange={data => {
@@ -258,7 +258,7 @@ export class projects extends Component {
                         mimeTypes={['image/png', 'image/jpeg', 'image/jpg', 'text/xml']}
                         query={''}
                         viewId={'DOCUMENTS'}>
-                    </GooglePicker></Button>
+                    </GooglePicker>&nbsp;
                     
                     <Button onClick={() => this.setState({modalShow:true})} variant="outline-primary" type="submit"><i className='fa fa-plus'></i> Add Project</Button>&nbsp;
                     <Button onClick={() => this.setState({modalShowOpen:true})} variant="outline-primary" type="submit"><i className='fa fa-plus'></i> Open Existing Project</Button>
@@ -455,13 +455,13 @@ export class projects extends Component {
         var user = GoogleAuth.currentUser.get();
         var isAuthorized = user.hasGrantedScopes(SCOPE);
         if (isAuthorized) {
-          $('#getDrive').removeAttr('hidden');
+
           $('#sign-in-or-out-button').html('Sign out');
           $('#revoke-access-button').css('display', 'inline-block');
           $('#auth-status').html('You are currently signed in and have granted ' +
               'access to this app.');
         } else {
-          $('#getDrive').attr('hidden','hidden');
+
           $('#sign-in-or-out-button').html('Sign In/Authorize Google');
           $('#revoke-access-button').css('display', 'none');
           $('#auth-status').html('You have not authorized this app or you are ' +

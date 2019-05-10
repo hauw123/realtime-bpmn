@@ -27,9 +27,9 @@ export class about extends Component {
                   Cara penggunaan : 
                 </Button>&nbsp;
                 <div style={divStyle01}>
-                  1. Lakukan <Link to="/login">Login</Link> terlebih dahulu<br></br>
+                  1. Lakukan Login terlebih dahulu<br></br>
                   2. Klik tab <Link to="/project">My Project</Link><br></br>
-                  3. Pilih salah satu dari langkah 4 - 6<br></br>
+                  3. Pilih salah satu dari langkah 4 - 6. Kemudian, lanjut ke langkah 7<br></br>
                   4. Lakukan penambahan project baru dengan <b>| Add Project |</b><br></br>
                   5. Lakukan penambahan project baru dengan menggunakan file dari komputer pribadi <b>| Open Existing Project |</b><br></br>
                   6. Lakukan penambahan project baru dengan menggunakan file dari google drive <b>| Sign in Google |</b> dan pilih file melalui <b>| Open Google Chooser |</b><br></br>
