@@ -455,13 +455,13 @@ export class projects extends Component {
         var user = GoogleAuth.currentUser.get();
         var isAuthorized = user.hasGrantedScopes(SCOPE);
         if (isAuthorized) {
-
+            $('#getDrive').removeAttr('hidden');
           $('#sign-in-or-out-button').html('Sign out');
           $('#revoke-access-button').css('display', 'inline-block');
           $('#auth-status').html('You are currently signed in and have granted ' +
               'access to this app.');
         } else {
-
+            $('#getDrive').attr('hidden','hidden');
           $('#sign-in-or-out-button').html('Sign In/Authorize Google');
           $('#revoke-access-button').css('display', 'none');
           $('#auth-status').html('You have not authorized this app or you are ' +
