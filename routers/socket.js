@@ -7,8 +7,12 @@ const M_friend = require('../models/friendship');
 var socketio = require('socket.io');
 exports.socketServer = function (app, server) {
   var io = socketio.listen(server);
-  io.set('origins', '*:*');
-io.set('match origin protocol', true);
+  io.configure(function () { 
+    io.set("transports", ["xhr-polling"]); 
+    io.set("polling duration", 10); 
+    io.set('origins', '*:*')
+    io.set('match origin protocol', true)
+  });
   
   const projectroom = ["aaasgag","testgag"]
 
@@ -72,7 +76,8 @@ io.set('match origin protocol', true);
       // });
     })
 
-    setInterval(() => io.emit('time', new Date().toTimeString()), 10);
+    // setInterval(() => io.emit('time', new Date().toTimeString()), 10);
+    setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
 };
 
 
