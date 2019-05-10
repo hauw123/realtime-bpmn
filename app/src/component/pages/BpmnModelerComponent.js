@@ -26,7 +26,7 @@ import socketIOClient from 'socket.io-client';
 //     path:'/bpmndiagram'
 // });
 
-const endpoint = "http://localhost:3000/bpmndiagram";
+const endpoint = "https://realtime-e-bpmn.herokuapp.com/bpmndiagram";
 const socket = socketIOClient.connect(endpoint);
 
 var GoogleAuth;
