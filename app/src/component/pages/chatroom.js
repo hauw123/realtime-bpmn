@@ -3,13 +3,16 @@ import {InputGroup,Form,Button} from 'react-bootstrap';
 import socketIOClient from 'socket.io-client';
 import Moment from 'moment';
 
-const endpoint = "https://realtime-e-bpmn.herokuapp.com";
-const socket = socketIOClient(endpoint,{
-    path: '/bpmndiagram'
-});
-
-// const endpoint = "/bpmndiagram";
+// const endpoint = "https://realtime-e-bpmn.herokuapp.com/bpmndiagram";
 // const socket = socketIOClient(endpoint);
+
+// const endpoint = "http://localhost:3000";
+// const socket = socketIOClient(endpoint, {
+//     path:'/bpmndiagram'
+// });
+
+const endpoint = "http://localhost:3000/bpmndiagram";
+const socket = socketIOClient(endpoint);
 
 export class chatroom extends Component {
 

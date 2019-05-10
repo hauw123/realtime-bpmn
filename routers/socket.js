@@ -8,9 +8,9 @@ var socketio = require('socket.io');
 exports.socketServer = function (app, server) {
   var io = socketio.listen(server);
   
-    io.set("transports", ["xhr-polling"]); 
+    // io.set("transports", ["xhr-polling"]); 
     // io.set("polling duration", 10); 
-    io.set('origins', '*:*')
+    // io.origins('*:*')
     // io.set('match origin protocol', true)
   
   
