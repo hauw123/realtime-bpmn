@@ -4,10 +4,7 @@ import socketIOClient from 'socket.io-client';
 import Moment from 'moment';
 
 const endpoint = "https://realtime-e-bpmn.herokuapp.com";
-const socket = socketIOClient(endpoint,{
-    transports: ['websocket'],
-    upgrade: false,
-});
+const socket = socketIOClient(endpoint);
 
 // const endpoint = "/bpmndiagram";
 // const socket = socketIOClient(endpoint);
