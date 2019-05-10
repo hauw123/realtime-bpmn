@@ -18,7 +18,7 @@ import canvg from 'canvg-browser';
 
 import socketIOClient from 'socket.io-client';
 
-const endpoint = "https://realtime-e-bpmn.herokuapp.com/bpmndiagram";
+const endpoint = "https://realtime-e-bpmn.herokuapp.com";
 const socket = socketIOClient(endpoint,{
     transports: ['websocket'],
     upgrade: false,
