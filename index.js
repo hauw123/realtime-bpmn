@@ -114,7 +114,7 @@ app.get("*", (req, res) => {
 // });
 
 //Port yang akan digunakan 
-server.listen(PORT, () => console.log('Server started on port'));
+server.listen(PORT, () => console.log('Server started on port'+ PORT));
 //server.listen(PORT, () => console.log('Server started on port'));
 
 // const projectroom = ["aaasgag","testgag"]

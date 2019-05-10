@@ -12,7 +12,7 @@ exports.socketServer = function (app, server) {
 
   io.of("/bpmndiagram")
     .on("connection", (socket) => {
-      console.log("Client connected in namespace" + socket);
+      console.log("Client connected in namespace");
   
       socket.on("joinRoom",(room) => {
         console.log("join room chat")
@@ -36,11 +36,6 @@ exports.socketServer = function (app, server) {
         console.log(room.id)
         console.log(room.user)
         socket.join(room.id);
-        // console.log('joining room : '+ room);
-          
-        //   io.of("/bpmndiagram").emit("newUser", "New user has join the "+room)
-        //   .in(room).emit("newUser", "New user has join "+ room)
-        //   return socket.emit("success", "you have succesfully join this "+ room);
 
       });
   

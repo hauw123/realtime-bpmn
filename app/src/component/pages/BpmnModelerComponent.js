@@ -18,10 +18,11 @@ import canvg from 'canvg-browser';
 
 import socketIOClient from 'socket.io-client';
 
-const endpoint = "https://realtime-e-bpmn.herokuapp.com/";
-const socket = socketIOClient(endpoint,{
-    transports: ['websocket']
-});
+const endpoint = "http://realtime-e-bpmn.herokuapp.com/bpmndiagram";
+const socket = socketIOClient(endpoint);
+
+// const endpoint = "http://localhost:3000/bpmndiagram";
+// const socket = socketIOClient(endpoint);
 
 var GoogleAuth;
 var SCOPE = 'https://www.googleapis.com/auth/drive';
@@ -45,7 +46,6 @@ class BpmnModelerComponent extends Component {
         
         var _this = this;
         socket.on('xmlproject', function(data) {
-
             _this.setState({
                 xmldata: data.xml
             })
@@ -120,6 +120,7 @@ class BpmnModelerComponent extends Component {
 
     componentWillMount() {
     
+        // socket.emit("joinRoom",this.props.match.params.id);
         socket.emit("joinRoomProject", {
             id:this.props.match.params.id,
             user:localStorage.email,
