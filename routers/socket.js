@@ -7,6 +7,8 @@ const M_friend = require('../models/friendship');
 var socketio = require('socket.io');
 exports.socketServer = function (app, server) {
   var io = socketio.listen(server);
+  io.set('origins', '*:*');
+io.set('match origin protocol', true);
   
   const projectroom = ["aaasgag","testgag"]
 
