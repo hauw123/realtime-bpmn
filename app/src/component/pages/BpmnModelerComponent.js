@@ -18,8 +18,8 @@ import canvg from 'canvg-browser';
 
 import socketIOClient from 'socket.io-client';
 
-const endpoint = "https://realtime-e-bpmn.herokuapp.com/bpmndiagram";
-const socket = socketIOClient();
+const endpoint = "/bpmndiagram";
+const socket = socketIOClient(endpoint);
 
 // const endpoint = "http://localhost:3000/bpmndiagram";
 // const socket = socketIOClient(endpoint);
