@@ -240,7 +240,7 @@ export class projects extends Component {
                     {/* GoogleDrive */}
                     <Button variant="outline-dark" id="sign-in-or-out-button">Sign In/Authorize Google</Button>&nbsp;
 
-                    <GooglePicker clientId={'698242060833-9at25qfsnpvvhjr5eg3qiaes74dpbmpv.apps.googleusercontent.com'}
+                    <button type="button" id="getDrive"><GooglePicker clientId={'698242060833-9at25qfsnpvvhjr5eg3qiaes74dpbmpv.apps.googleusercontent.com'}
                         developerKey={'AIzaSyDcf2KSBcCS1EHgEO6xCGwvlf5DT9mvDG4'}
                         scope='https://www.googleapis.com/auth/drive'
                         onChange={data => {
@@ -258,7 +258,7 @@ export class projects extends Component {
                         mimeTypes={['image/png', 'image/jpeg', 'image/jpg', 'text/xml']}
                         query={''}
                         viewId={'DOCUMENTS'}>
-                    </GooglePicker>&nbsp;
+                    </GooglePicker></button>&nbsp;
                     
                     <Button onClick={() => this.setState({modalShow:true})} variant="outline-primary" type="submit"><i className='fa fa-plus'></i> Add Project</Button>&nbsp;
                     <Button onClick={() => this.setState({modalShowOpen:true})} variant="outline-primary" type="submit"><i className='fa fa-plus'></i> Open Existing Project</Button>
