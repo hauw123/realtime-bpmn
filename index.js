@@ -24,6 +24,8 @@ const server = http.createServer(app);
 const io = socketIO(server);
 var sockets = require('./routers/socket');
 sockets.socketServer(app, server);
+sockets.set('origins', '*:*');
+sockets.set('match origin protocol', true);
 
 //connect to mongodb Testing Hosting
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/database_rtbpmn', {
