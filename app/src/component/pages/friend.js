@@ -241,7 +241,7 @@ export class friend extends Component {
     }
 
     //Digunakan pada function rendersearch()
-    onClickuserid = (e) => {
+    onClickuserid = (e,i) => {
         console.log(e);
         var _this = this;
         Axios.post('apiuser/addfriend', {
