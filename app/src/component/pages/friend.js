@@ -249,7 +249,12 @@ export class friend extends Component {
             recipient: e
         })
             .then(res => {
-                console.log(res);
+                var array = [...this.state.users]; // make a separate copy of the array
+                
+                if (i !== -1) {
+                  array.splice(i, 1);
+                  this.setState({users: array});
+                }
 
             }
             ).catch(err => { console.log(err); alert('Error add') })
@@ -296,7 +301,7 @@ export class friend extends Component {
                 variant="outline-info" type="submit">Request</Button></td>);
             }
             if(user.isFriend == false && user.isRequest == false){
-                button= (<td><Button style={buttonStyle} onClick={() => this.onClickuserid(user._id)}
+                button= (<td><Button style={buttonStyle} onClick={() => this.onClickuserid(user._id,i)}
                 variant="outline-success" type="submit">Add</Button></td>);
             }
             
