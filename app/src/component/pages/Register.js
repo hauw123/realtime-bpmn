@@ -72,7 +72,7 @@ export class Register extends Component {
                                 Submit
                         </Button>
                             <Form.Text className="text-muted">
-                                Don't have account? <Link style={linkStyle} to="/login">Sign In</Link>
+                                Already have an account ? <Link style={linkStyle} to="/login">Sign In</Link>
                             </Form.Text>
 
                         </Form>

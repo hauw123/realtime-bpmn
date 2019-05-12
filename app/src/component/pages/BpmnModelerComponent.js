@@ -547,7 +547,7 @@ class BpmnModelerComponent extends Component {
                     variant="outline-info"
                     type="submit">Save
                 </Button>&nbsp; */}
-                <Tooltip background="white" color="black"  radius ="50" content="Download diagram ke komputer pribadi">                
+                <Tooltip background="white" color="black"  radius ={50} content="Download diagram ke komputer pribadi">                
                 <Button
                     onClick={this.DownloadDiagram}
                     variant="outline-dark"
@@ -556,7 +556,7 @@ class BpmnModelerComponent extends Component {
                 </Button>
                 </Tooltip>&nbsp;
 
-                <Tooltip background="white" color="black" radius ="50" content="Download gambar dengan format PNG">    
+                <Tooltip background="white" color="black" radius ={50} content="Download gambar dengan format PNG">    
                 <Button
                     onClick={() => this.DownloadImage(1)}
                     variant="outline-dark"
@@ -565,7 +565,7 @@ class BpmnModelerComponent extends Component {
                 </Button>
                 </Tooltip>&nbsp;
 
-                <Tooltip background="white" color="black"  radius ="50" content="Download gambar dengan format JPG">    
+                <Tooltip background="white" color="black"  radius ={50} content="Download gambar dengan format JPG">    
                 <Button
                     onClick={() => this.DownloadImage(2)}
                     variant="outline-dark"
@@ -574,7 +574,7 @@ class BpmnModelerComponent extends Component {
                 </Button>
                 </Tooltip>&nbsp;
 
-                <Tooltip background="white" color="black" radius ="50" content="Download gambar dengan format JPEG">    
+                <Tooltip background="white" color="black" radius ={50} content="Download gambar dengan format JPEG">    
                 <Button
                     onClick={() => this.DownloadImage(3)}
                     variant="outline-dark"
@@ -583,7 +583,7 @@ class BpmnModelerComponent extends Component {
                  </Button>
                  </Tooltip>&nbsp;
 
-                 <Tooltip background="white" color="black"  radius ="50" content="Print diagram">    
+                 <Tooltip background="white" color="black"  radius ={50} content="Print diagram">    
                  <Button
                     onClick={() => this.Print()}
                     variant="outline-dark"
@@ -593,13 +593,13 @@ class BpmnModelerComponent extends Component {
                  </Tooltip>&nbsp;
 
 
-        <Tooltip background="white" color="black"radius ="50" content="Login untuk upload">    
+        <Tooltip background="white" color="black"radius ={50} content="Login untuk upload">    
         <Button variant="outline-dark" id="sign-in-or-out-button">Sign In/Authorize Google</Button></Tooltip>&nbsp;
         
-        <Tooltip background="white" color="black"radius ="50" content="Hapus akses website untuk upload">   
+        <Tooltip background="white" color="black"radius ={50} content="Hapus akses website untuk upload">   
         <Button variant="outline-dark" id="revoke-access-button"><i className="fa fa-google"></i> Revoke access</Button></Tooltip>
         
-        <Tooltip background="white" color="black"radius ="50" content="Upload diagram">   
+        <Tooltip background="white" color="black"radius ={50} content="Upload diagram">   
         <Button
                     id="UploadDrive"
                     hidden

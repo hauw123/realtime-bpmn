@@ -65,7 +65,7 @@ export class modaledit extends Component {
             </React.Fragment>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.onHide}>{this.props.projectid}{this.props.projectname}Close</Button>
+                    <Button onClick={this.props.onHide}>Close</Button>
                 </Modal.Footer>
             </Modal>
         );

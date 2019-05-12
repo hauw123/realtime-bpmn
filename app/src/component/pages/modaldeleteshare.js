@@ -41,7 +41,7 @@ export class modaldeleteshare extends Component {
     }
 
     onClickRemoveUser = (iduser,idproject) => {
-        
+        var _this = this;
         Axios.delete('apiuser/removeshared', {
             params: {
                 id:iduser,
@@ -50,7 +50,7 @@ export class modaldeleteshare extends Component {
         }
         )
             .then(function (res) {
-                console.log(res)
+                _this.getdataallfriend();
             }).catch(err => {console.log(err)})
     }
 
@@ -63,7 +63,7 @@ export class modaldeleteshare extends Component {
                     <tr key={user._id}>
                         <td>{user.email}</td>
                         <td><Button 
-                        onClick={() => this.onClickRemoveUser(user._id,this.props.projectid)} 
+                        onClick={() => {this.onClickRemoveUser(user._id,this.props.projectid); this.props.onHide();}} 
                         variant="outline-danger" 
                         type="submit">Remove</Button> &nbsp; &nbsp;</td>
                     </tr>
@@ -107,7 +107,7 @@ export class modaldeleteshare extends Component {
             </React.Fragment>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.onHide}>{this.props.projectid}Close</Button>
+                    <Button onClick={this.props.onHide}>Close</Button>
                 </Modal.Footer>
             </Modal>
         );

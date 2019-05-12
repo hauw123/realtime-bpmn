@@ -106,7 +106,7 @@ export class modalinviteproject extends Component {
             </React.Fragment>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.onHide}>{this.props.projectid}Close</Button>
+                    <Button onClick={this.props.onHide}>Close</Button>
                 </Modal.Footer>
             </Modal>
         );
