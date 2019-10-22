@@ -37,6 +37,7 @@ export class projects extends Component {
             activeModalInvite:null,
             activeModalShare:null,
             activeModalEdit:null,
+            search:''
         };
 
         this.clickHandler = this.clickHandler.bind(this);
@@ -51,7 +52,7 @@ export class projects extends Component {
         this.setState({
           count: this.state.count - 1
         })
-        //console.log(this.state.count)
+        console.log(this.state.count)
         if(this.state.count < 1) {
             this.state.count = 3
             this.getdataallproject();
@@ -116,7 +117,7 @@ export class projects extends Component {
     }
     
     hideModalEdit() {
-        this.setState({ activeModalEdit: null })
+        this.setState({ activeModalEdit: null,count:1 })
     }
 
     clickHandlerDeleteShare(e, index) {
@@ -154,11 +155,15 @@ export class projects extends Component {
         })
         .then(res=>{
             console.log(res)
+            _this.setState({
+                count:1
+            })
         })
         .catch(err => {console.log(err)})
     }
 
     getdoc =(fileId,callback)=>{
+        var _this = this;
         var request = window.gapi.client.drive.files.get({
           fileId: fileId,
           alt: 'media'
@@ -166,20 +171,50 @@ export class projects extends Component {
         request.then(function(response){
             console.log(response); //response.body has the text content of the file
             console.log(response.body)
+
+            // const parser = new window.DOMParser();
+            // const theDom = parser.parseFromString(response.body, 'application/xml');
+            // if (theDom.getElementsByTagName('parsererror').length > 0) {
+            //     alert('File tidak sesuai format bpmn');
+            // } else {
+            //     Axios.post('apiuser/addproject', {
+            //         name: 'G-Drivefile'+Moment(new Date(Date.now())).format("YYYY-MM-DD hh:mm:ss"),
+            //         dataxml: response.body,
+            //         owner: localStorage.id
+            //     }
+            //     ).then(res => {
+            //         if (res.status === 200) {
+            //             console.log(res);
+            //             console.log("from google drive")
+            //             _this.setState({count:1})
+                        
+            //         } else {
+            //             const error = new Error(res.error);
+            //             throw error;
+            //         }
+            //     }
+            //     ).catch(err => { console.log(err); alert('File tidak sesuai format bpmn') })
+            //     if (typeof callback === "function") callback(response.body); 
+            // }
+
+
             Axios.post('apiuser/addproject', {
-                name: 'G-Drivefile'+Date.now(),
+                name: 'G-Drivefile'+Moment(new Date(Date.now())).format("YYYY-MM-DD hh:mm:ss"),
                 dataxml: response.body,
                 owner: localStorage.id
             }
             ).then(res => {
                 if (res.status === 200) {
                     console.log(res);
+                    console.log("from google drive")
+                    _this.setState({count:1})
+                    
                 } else {
                     const error = new Error(res.error);
                     throw error;
                 }
             }
-            ).catch(err => { console.log(err); alert('Error loggin in') })
+            ).catch(err => { console.log(err); alert('File tidak sesuai format bpmn') })
             if (typeof callback === "function") callback(response.body); 
         },function(error){
             console.error(error)
@@ -190,8 +225,8 @@ export class projects extends Component {
     renderallproject(){
         var _this = this;
         var iduser = localStorage.id;
-        let modalClose = () => this.setState({modalShow: false})
-        let modalOpenClose = () => this.setState({modalShowOpen: false})
+        let modalClose = () => this.setState({modalShow: false,count:1})
+        let modalOpenClose = () => this.setState({modalShowOpen: false,count:1})
         
 
         const render = _this.state.allproject.map(function (project, i) {
@@ -235,6 +270,7 @@ export class projects extends Component {
                     <div style={tabstyle} >
                         <h1>My Project</h1>
                     </div><br></br>
+                    
                     <div style={divstyle}>
 
                     {/* GoogleDrive */}
@@ -264,6 +300,15 @@ export class projects extends Component {
                     <Button onClick={() => this.setState({modalShowOpen:true})} variant="outline-primary" type="submit"><i className='fa fa-plus'></i> Open Existing Project</Button>
                     <ModalProject show={this.state.modalShow} onHide={modalClose} />
                     <ModalOpenProject show={this.state.modalShowOpen} onHide={modalOpenClose} />
+                    
+                    {/* Search Project Name */}
+                    {/* <div style={tabstyle} >
+                                <Form onSubmit={this.handleSearch} inline>
+                                    <FormControl onChange={this.onChange} type="text" name='search' placeholder="Search project" className=" mr-sm-2" />
+                                    <Button variant="outline-primary" type="submit">Search</Button>
+                                </Form>
+                    </div> */}
+                   
                     </div>
                     
                     <div style={tablestyle}>
@@ -289,6 +334,41 @@ export class projects extends Component {
                 </div>
             </React.Fragment>
         )
+    }
+
+    //Search Project
+    handleSearch = (e) => {
+        e.preventDefault();
+        var _this = this;
+
+
+        console.log(this.state.search)
+        if(this.state.search !== ''){
+            _this.setState({
+                count:1000
+            })
+        }
+        else{
+            _this.setState({
+                count:3
+            })
+        }
+
+        Axios.get('apiuser/searchproject', {
+            params: {
+                project: this.state.search,
+                id: localStorage.id
+            }
+        })
+            .then(function (res) {
+                _this.setState({
+                    allproject:res.data,
+                    
+                })
+            })
+            .catch(function (e) {
+                console.log("Error ", e);
+            })
     }
 
     getdatasharedproject = () => {
@@ -455,13 +535,13 @@ export class projects extends Component {
         var user = GoogleAuth.currentUser.get();
         var isAuthorized = user.hasGrantedScopes(SCOPE);
         if (isAuthorized) {
-            $('#getDrive').removeAttr('hidden');
+          $('#getDrive').removeAttr('hidden');
           $('#sign-in-or-out-button').html('Sign out');
           $('#revoke-access-button').css('display', 'inline-block');
           $('#auth-status').html('You are currently signed in and have granted ' +
               'access to this app.');
         } else {
-            $('#getDrive').attr('hidden','hidden');
+          $('#getDrive').attr('hidden','hidden');
           $('#sign-in-or-out-button').html('Sign In/Authorize Google');
           $('#revoke-access-button').css('display', 'none');
           $('#auth-status').html('You have not authorized this app or you are ' +
