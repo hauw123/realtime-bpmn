@@ -13,21 +13,14 @@ import RestrictionModules from './Restriction';
 import $ from 'jquery';
 import Moment from 'moment';
 import Tooltip from "react-simple-tooltip"
+import readOnly from './Lock';
 
 import canvg from 'canvg-browser';
 
 import socketIOClient from 'socket.io-client';
 
-// const endpoint = "https://realtime-e-bpmn.herokuapp.com/bpmndiagram";
-// const socket = socketIOClient(endpoint);
-
-// const endpoint = "http://localhost:3000";
-// const socket = socketIOClient(endpoint, {
-//     path:'/bpmndiagram'
-// });
-
-const endpoint = "https://realtime-e-bpmn.herokuapp.com/bpmndiagram";
-const socket = socketIOClient.connect(endpoint);
+const endpoint = "/bpmndiagram";
+const socket = socketIOClient(endpoint);
 
 var GoogleAuth;
 var SCOPE = 'https://www.googleapis.com/auth/drive';
@@ -45,7 +38,12 @@ class BpmnModelerComponent extends Component {
             count: 1,
             scale: 1,
             datasvg: '',
-            statusgoogle:'true'
+            statusgoogle:'true',
+            containerWidth:75,
+            divWidth:25,
+            statusChat:'Hide',
+            edit:true,
+            editor:''
         }
 
         
@@ -56,6 +54,42 @@ class BpmnModelerComponent extends Component {
             })
             _this.newBpmnDiagram(_this.state.xmldata);
         });
+
+        //DISABLE LABEL
+
+        socket.on('userediting', function(data){
+            _this.setState({
+                editor:data.user + " melakukan edit"
+            })
+            _this.setState({edit:false})
+            console.log(data.user)
+        })
+
+        socket.on('finishedit', function(data){
+            _this.setState({
+                editor: '',
+                edit: true
+            })
+        })
+
+        //DISABLE MODELER
+
+        socket.on('usereditingmodeler', function(data){
+            console.log("ok")
+            _this.modeler.get('readOnly').readOnly(true);
+            _this.setState({
+                editor:data.user + " melakukan edit",
+                edit:false
+            })
+        })
+
+        socket.on("finisheditmodeler", function(data){
+            _this.modeler.get('readOnly').readOnly(false);
+            _this.setState({
+                editor: '',
+                edit: true
+            })
+        })
 
         this.console = this.console.bind(this);
 
@@ -79,26 +113,35 @@ class BpmnModelerComponent extends Component {
 
     }
 
-
-
     componentWillUnmount() {
-        clearInterval(this.intervalId);
+        clearInterval(this.intervalId);//Timer check online / offline
     }
 
     modeler = null;
 
     componentDidMount = () => {
+        var priority = 10000;
         var _this = this;
+        
         //this.intervalId = setInterval(this.timer.bind(this), 1000);
+
+
+        //this.modeler = new BpmnModeler({ container: '#bpmnview', modules: [readOnly] });
+
+
         this.modeler = new BpmnModeler({
             container: '#bpmnview',
             keyboard: {
                 bindTo: window
             },
             additionalModules: [
-                RestrictionModules
+                RestrictionModules,
+                readOnly
             ]
         });
+
+        
+        
 
         this.getxmlproject();
 
@@ -115,12 +158,103 @@ class BpmnModelerComponent extends Component {
 
         })
         )
+
+        this.modeler.get('eventBus').on('element.click', function(event) {
+            console.log(event.element.type)
+          });
+
+
+            this.modeler.get('eventBus').on('element.dblclick', priority, function(event) {
+                if(_this.state.edit === true){
+
+                //DISABLE LABEL EDIT
+                //     console.log("clicked 2");
+                //     if(event.element.type!== 'bpmn:Collaboration'){                    
+                //         _this.setState({edit:false,editor:localStorage.name + ' melakukan edit'})
+                //     console.log(_this.state.edit);
+                //     socket.emit('send edit', {
+                //         user: localStorage.name,
+                //         room: _this.state.projectid
+                //     })
+                // }
+
+
+                //DISABLE MODELER
+                if(event.element.type!== 'bpmn:Collaboration'){                    
+                                    _this.setState({edit:false,editor:localStorage.name + ' melakukan edit'})
+                                    socket.emit('send edit viewer', {
+                                        user: localStorage.name,
+                                        room: _this.state.projectid
+                                    })
+                }
+
+                }
+                else{
+                    //_this.modeler.get('readOnly').readOnly(false);
+                    // return false;
+                }
+            });
+
+            this.modeler.get('eventBus').on('drag.start', priority, function(event) {
+                socket.emit('send edit viewer', {
+                    user: localStorage.name,
+                    room: _this.state.projectid
+                })
+                console.log("drag start")
+                console.log(event)
+            })
+
+            this.modeler.get('eventBus').on('drag.end', priority, function(event) {
+                console.log("drag end")
+                console.log(event)
+                socket.emit('finish edit modeler', {
+                    room: _this.state.projectid
+                })
+            })
+
+        // this.modeler.get('eventBus').on('element.mouseup', function(event) {
+        //     console.log("clicked release")
+        //   });
+
+        //   this.modeler.get('eventBus').on('element.mousedown', function(event) {
+        //     console.log("clicked hold")
+        //   });
+
+           
+
+
  
         this.modeler.get('eventBus').on('shape.changed', 999999, function(event) {
-              console.log(event.element.type);
+
+            //DISABLE MODELER
+            socket.emit('finish edit modeler', {
+                room: _this.state.projectid
+            })
+
+            //DISABLE LABEL
+
+            // socket.emit('finish edit', {
+            //     room: _this.state.projectid
+            // })
+            
+              console.log(event);
+              _this.setState({edit:true,editor:''})
             });
 
             _this.handleClientLoad();
+    }
+
+    changeToViewer = () =>{
+        console.log("ok")
+        this.modeler.get('readOnly').readOnly(true);
+        
+    }
+
+    changeToModeler = () =>{
+        console.log("ok")
+        this.modeler.get('readOnly').readOnly(false);
+        this.setState({edit:true,editor:''})
+        
     }
 
     componentWillMount() {
@@ -138,6 +272,16 @@ class BpmnModelerComponent extends Component {
         var config = {
             headers: { 'x-access-token': localStorage.getItem('token') }
         }
+
+        this.intervalId = setInterval(function(){
+            if(navigator.onLine){
+                //console.log('online')
+            }else{
+                //console.log('offline')
+                window.location="/noconnection";
+                
+            }
+        },3000);
 
         //Cek Token dari user apakah valid
         Axios.get('/auth', config)
@@ -529,14 +673,43 @@ class BpmnModelerComponent extends Component {
         }
     }
 
+    hideChat = () => {
+        if(this.state.statusChat === 'Hide'){
+            this.setState({statusChat:'Show'})
+            $('#chatRoom').attr('hidden','hidden');
+            // $('#buttonHide').attr('hidden','hidden');
+            // $('#buttonShow').removeAttr('hidden');
+            this.setState({containerWidth:95})
+            this.setState({divWidth:5})
+        }
+        if(this.state.statusChat === 'Show'){
+            this.setState({statusChat:'Hide'})
+            $('#chatRoom').removeAttr('hidden');
+            // $('#buttonShow').attr('hidden','hidden');
+            // $('#buttonHide').removeAttr('hidden');
+            this.setState({containerWidth:75})
+            this.setState({divWidth:25})
+        }
+    }
+
+
 
 
     render = () => {
+        
         return (
             <div id="bpmncontainer">
-                <div style={chatstyle} id="propview" style={{ width: '25%', height: '93vh', float: 'right', maxHeight: '98vh', overflowX: 'auto' }}><Chat projectid={this.state.projectid} /></div>
+                
+                <div style={chatstyle} id="propview" style={{ width: this.state.divWidth+'%', height: '93vh', float: 'right', maxHeight: '98vh', overflowX: 'auto' }}>
+                    <div style={{width:'100%',display:'flex'}} >                
+                    <Button variant="outline-dark" style={buttonStyle}  id="buttonHide" onClick={this.hideChat}><i className="fa fa-eye" aria-hidden="true"></i> {this.state.statusChat}</Button>
+                    </div>
+
+                    <div id="chatRoom"><Chat projectid={this.state.projectid} /></div>
+                    
+                    </div>
                 {/* <div id="propview" style={{ width: '25%', height: '98vh', float: 'right', maxHeight: '98vh', overflowX: 'auto' }}></div> */}
-                <div id="bpmnview" style={{ width: '75%', height: '90vh', float: 'left' }}></div>
+                <div id="bpmnview" style={{ width: this.state.containerWidth+'%', height: '90vh', float: 'left' }}></div>
 
                 <canvas hidden  ref="canvasforimage" id="canvasforimage">
                 </canvas>
@@ -547,7 +720,7 @@ class BpmnModelerComponent extends Component {
                     variant="outline-info"
                     type="submit">Save
                 </Button>&nbsp; */}
-                <Tooltip background="white" color="black"  radius ={50} content="Download diagram ke komputer pribadi">                
+                <Tooltip background="white" color="black"  radius={50} content="Download diagram ke komputer pribadi">                
                 <Button
                     onClick={this.DownloadDiagram}
                     variant="outline-dark"
@@ -556,7 +729,7 @@ class BpmnModelerComponent extends Component {
                 </Button>
                 </Tooltip>&nbsp;
 
-                <Tooltip background="white" color="black" radius ={50} content="Download gambar dengan format PNG">    
+                <Tooltip background="white" color="black" radius={50} content="Download gambar dengan format PNG">    
                 <Button
                     onClick={() => this.DownloadImage(1)}
                     variant="outline-dark"
@@ -565,7 +738,7 @@ class BpmnModelerComponent extends Component {
                 </Button>
                 </Tooltip>&nbsp;
 
-                <Tooltip background="white" color="black"  radius ={50} content="Download gambar dengan format JPG">    
+                <Tooltip background="white" color="black"  radius={50} content="Download gambar dengan format JPG">    
                 <Button
                     onClick={() => this.DownloadImage(2)}
                     variant="outline-dark"
@@ -574,7 +747,7 @@ class BpmnModelerComponent extends Component {
                 </Button>
                 </Tooltip>&nbsp;
 
-                <Tooltip background="white" color="black" radius ={50} content="Download gambar dengan format JPEG">    
+                <Tooltip background="white" color="black" radius={50} content="Download gambar dengan format JPEG">    
                 <Button
                     onClick={() => this.DownloadImage(3)}
                     variant="outline-dark"
@@ -583,7 +756,7 @@ class BpmnModelerComponent extends Component {
                  </Button>
                  </Tooltip>&nbsp;
 
-                 <Tooltip background="white" color="black"  radius ={50} content="Print diagram">    
+                 <Tooltip background="white" color="black"  radius={50} content="Print diagram">    
                  <Button
                     onClick={() => this.Print()}
                     variant="outline-dark"
@@ -593,30 +766,32 @@ class BpmnModelerComponent extends Component {
                  </Tooltip>&nbsp;
 
 
-        <Tooltip background="white" color="black"radius ={50} content="Login untuk upload">    
-        <Button variant="outline-dark" id="sign-in-or-out-button">Sign In/Authorize Google</Button></Tooltip>&nbsp;
-        
-        <Tooltip background="white" color="black"radius ={50} content="Hapus akses website untuk upload">   
-        <Button variant="outline-dark" id="revoke-access-button"><i className="fa fa-google"></i> Revoke access</Button></Tooltip>
-        
-        <Tooltip background="white" color="black"radius ={50} content="Upload diagram">   
-        <Button
-                    id="UploadDrive"
-                    hidden
-                    onClick={() => this.UploadFiles()}
-                    variant="outline-dark"
-                    type="submit">
-                    <i className="fa fa-google"></i> Upload Diagram to Drive
-        </Button></Tooltip>&nbsp;
+                <Tooltip background="white" color="black" radius={50} content="Login untuk upload">    
+                <Button variant="outline-dark" id="sign-in-or-out-button">Sign In/Authorize Google</Button></Tooltip>&nbsp;
+                
+                <Tooltip background="white" color="black" radius={50} content="Hapus akses website untuk upload">   
+                <Button variant="outline-dark" id="revoke-access-button"><i className="fa fa-google"></i> Revoke access</Button></Tooltip>
+                
+                <Tooltip background="white" color="black" radius={50} content="Upload diagram">   
+                <Button
+                            id="UploadDrive"
+                            hidden
+                            onClick={() => this.UploadFiles()}
+                            variant="outline-dark"
+                            type="submit">
+                            <i className="fa fa-google"></i> Upload Diagram to Drive
+                </Button></Tooltip>&nbsp;
 
-        <div id="auth-status"></div>
+        {/* <div id="auth-status"></div> */}
+        <div style={{display:'inline'}}>{this.state.editor}</div>&nbsp;&nbsp;
+        <Button variant="outline-dark" onClick={() => this.changeToViewer()}>Testing</Button>&nbsp;
+        <Button variant="outline-dark" onClick={() => this.changeToModeler()}>Modeler</Button>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script async defer src="https://apis.google.com/js/api.js" 
+        {/* <script async defer src="https://apis.google.com/js/api.js" 
                 onload="this.onload=function(){};handleClientLoad()" 
                 onreadystatechange="if (this.readyState === 'complete') this.onload()">
-        </script>
-
+        </script> */}
 
             </div>
         )
@@ -630,6 +805,9 @@ const infoStyle = {
 }
 const chatstyle = {
     overflowY: "scroll"
+}
+const buttonStyle = {
+    margin: '0 auto'
 }
 
 export default BpmnModelerComponent;
